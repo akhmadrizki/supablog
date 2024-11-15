@@ -4,9 +4,22 @@ import Card from '../components/Card.astro';
 
 import { supabase } from '../lib/supabase';
 
-const { data, error } = await supabase
-	.from('posts')
-	.select();
+import {PrismaClient} from '@prisma/client';
+const prisma = new PrismaClient();
+
+// await prisma.tag.create({
+// 	data: {
+// 		name: 'Hello, Astro!',
+// 	}
+// });
+
+// get all tags
+const tags = await prisma.tag.findMany();
+
+
+
+
+
 // 	.insert({ title: 'Hello, Astro!', description: 'This is a new post.' })
 // 	.select();
 
@@ -18,18 +31,13 @@ const { data, error } = await supabase
 	<main>
 		<h1>Welcome to <span class="text-gradient">Astro</span></h1>
 		<ul role="list" class="link-card-grid">
-			{data?.map((post) => (
+			{tags?.map((post) => (
 				<Card
 					href={`/post/${post.id}`}
-					title={post.title}
-					body={post.description}
+					title={post.name}
+					body="This is a new post."
 				/>
 			))}
-			<!-- <Card
-				href="https://docs.astro.build/"
-				title="Documentation"
-				body="Learn how Astro works and explore the official API docs."
-			/> -->
 		</ul>
 	</main>
 </Layout>
